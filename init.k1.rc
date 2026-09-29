@@ -1,5 +1,13 @@
 on early-init
     mount debugfs debugfs /sys/kernel/debug mode=0755
+    # Boot is CPU-bound: max frequency until boot completes.
+    write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor performance
+
+on property:sys.boot_completed=1
+    write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor schedutil
+    # Full console logging again after a SPACEMIT_QUIET_BOOT boot.
+    write /proc/sys/kernel/printk "7 4 1 7"
+    write /proc/sys/kernel/printk_devkmsg on
 
 on init
     symlink /sdcard /storage/sdcard0
