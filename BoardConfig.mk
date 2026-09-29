@@ -42,6 +42,7 @@ BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(KERNEL_MODULES_PATH)/vendor_dlkm/*.k
 # MDIO scan binds the PHY to the Generic PHY driver (no rgmii-id RX delay) ->
 # eth0 TX works but RX is dead. Force the PHY modules first; the rest keep
 # wildcard order.
+# Ethernet stays out of recovery: eth0 there broke the USB gadget bind (-19).
 BOARD_VENDOR_KERNEL_MODULES_LOAD := \
     $(KERNEL_MODULES_PATH)/vendor_dlkm/phy_package.ko \
     $(KERNEL_MODULES_PATH)/vendor_dlkm/realtek.ko \
@@ -77,6 +78,9 @@ BOARD_VENDOR_SEPOLICY_DIRS += device/spacemit/k1/sepolicy/vendor
 
 # Recovery
 TARGET_RECOVERY_FSTAB_GENRULE := gen_fstab_k1
+
+# Recovery/fastbootd UI with power-key menu navigation (recovery/).
+TARGET_RECOVERY_UI_LIB := librecovery_ui_k1
 
 # VINTF
 DEVICE_MANIFEST_FILE := device/spacemit/k1/manifest.xml

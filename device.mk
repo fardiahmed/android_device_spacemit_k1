@@ -23,8 +23,11 @@ LOCAL_KERNEL := device/spacemit/k1-kernel/$(TARGET_KERNEL_USE)/Image
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 
-# Properties
+# Properties. ro.minui.pixel_format: minui's RGB565 fallback crashes recovery.
+# ro.recovery.ui.long_press_ms: 2 s long press to select in recovery/fastbootd.
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.minui.pixel_format=RGBX_8888 \
+    ro.recovery.ui.long_press_ms=2000 \
     ro.hardware.gralloc=minigbm \
     sys.usb.configfs=1 \
     sys.usb.controller=mv-udc \
@@ -42,6 +45,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Audio mixer controls (BPI-F3 / ES8326B codec)
 PRODUCT_COPY_FILES += \
     device/spacemit/k1/audio/mixer_controls.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_controls.xml
+
+# Recovery/fastbootd: restore sys.usb.configfs=1 after bootable/recovery's stock
+# init.rc resets it to 0 -- see init.recovery.k1.rc for why.
+PRODUCT_COPY_FILES += \
+    device/spacemit/k1/init.recovery.k1.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.k1.rc
 
 # Fstab
 PRODUCT_PACKAGES += \

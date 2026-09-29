@@ -1,0 +1,8 @@
+# Stock recovery init.rc sets sys.usb.configfs 0 in early-init; restore it before fs.
+on init
+    setprop sys.usb.configfs 1
+    # The UDC is c0900100.udc (as in init.k1.usb.rc), not mv-udc.
+    setprop sys.usb.controller c0900100.udc
+    setprop vendor.usb.controller c0900100.udc
+    # minui needs /dev/input to exist to watch for the late USB touchscreen.
+    mkdir /dev/input 0755 root root
