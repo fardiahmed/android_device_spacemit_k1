@@ -37,3 +37,7 @@
 
 # K1 DTB
 /vendor/dtb(/.*)?                 u:object_r:vendor_configs_file:s0
+
+# HDMI-CEC (cec-gpio adapter) and its AIDL HAL (vendor/spacemit/hardware/hdmi)
+/dev/cec[0-9]*                                                  u:object_r:cec_device:s0
+/vendor/bin/hw/android\.hardware\.tv\.hdmi-service\.k1          u:object_r:hal_tv_hdmi_k1_exec:s0

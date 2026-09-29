@@ -1,0 +1,13 @@
+# HDMI-CEC + HDMI connection AIDL HAL (vendor/spacemit/hardware/hdmi), one process serving both.
+type hal_tv_hdmi_k1, domain;
+type hal_tv_hdmi_k1_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_tv_hdmi_k1)
+
+hal_server_domain(hal_tv_hdmi_k1, hal_tv_hdmi_cec)
+hal_server_domain(hal_tv_hdmi_k1, hal_tv_hdmi_connection)
+
+# /dev/cec0 from the cec-gpio adapter.
+type cec_device, dev_type;
+allow hal_tv_hdmi_k1 cec_device:chr_file rw_file_perms;
+
+get_prop(hal_tv_hdmi_k1, hdmi_config_prop)

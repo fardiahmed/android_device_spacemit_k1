@@ -14,3 +14,6 @@ modalias_handling enabled
 /dev/video*               0660   media     camera
 /dev/media*               0660   media     camera
 /dev/v4l-subdev*          0660   media     camera
+
+# HDMI-CEC adapter (cec-gpio on GPIO_88), used by android.hardware.tv.hdmi-service.k1 (system)
+/dev/cec*                 0660   system     system
