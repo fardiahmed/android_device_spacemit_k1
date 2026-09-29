@@ -18,6 +18,12 @@ on fs
 on late-fs
     mount_all /vendor/etc/fstab.k1 --late
 
+# wpa_supplicant config and control sockets.
+on post-fs-data
+    mkdir /data/vendor/wifi 0771 wifi wifi
+    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+
 on boot
     chown system system /sys/class/backlight/backlight/brightness
     chmod 0664 /sys/class/backlight/backlight/brightness

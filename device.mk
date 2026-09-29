@@ -66,6 +66,16 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/spacemit/k1/firmware/powervr/rogue_36.29.52.182_v1.fw:$(TARGET_COPY_OUT_VENDOR)/firmware/powervr/rogue_36.29.52.182_v1.fw
 
+# Wi-Fi + Bluetooth: on-board RTL8852BS (8852bs.ko, hci_uart + btrtl).
+PRODUCT_PACKAGES += \
+    com.android.hardware.wifi \
+    com.spacemit.hardware.wpa_supplicant \
+    android.hardware.bluetooth-service.default
+
+PRODUCT_VENDOR_PROPERTIES += \
+    wifi.interface=wlan0 \
+    wifi.direct.interface=p2p-dev-wlan0
+
 # Soong namespace of this directory (fstab, recovery UI, HDMI-CEC HAL, Wi-Fi HAL/supplicant)
 PRODUCT_SOONG_NAMESPACES += \
     device/spacemit/k1

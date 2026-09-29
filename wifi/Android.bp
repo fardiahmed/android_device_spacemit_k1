@@ -1,0 +1,33 @@
+// RTL8852BS supplicant overlays, installed in the supplicant APEX (the AOSP one has none).
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+prebuilt_etc {
+    name: "wpa_supplicant_overlay.conf.k1",
+    src: "wpa_supplicant_overlay.conf",
+    filename: "wpa_supplicant_overlay.conf",
+    relative_install_path: "wifi",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "p2p_supplicant_overlay.conf.k1",
+    src: "p2p_supplicant_overlay.conf",
+    filename: "p2p_supplicant_overlay.conf",
+    relative_install_path: "wifi",
+    installable: false,
+}
+
+override_apex {
+    name: "com.spacemit.hardware.wpa_supplicant",
+    base: "com.android.hardware.wpa_supplicant",
+    // Same list as the base APEX (external/wpa_supplicant_8/apex/Android.bp) + overlays.
+    prebuilts: [
+        "com.android.hardware.wpa_supplicant.rc",
+        "com.android.hardware.hostapd.rc",
+        "wpa_supplicant.conf.prebuilt",
+        "wpa_supplicant_overlay.conf.k1",
+        "p2p_supplicant_overlay.conf.k1",
+    ],
+}
