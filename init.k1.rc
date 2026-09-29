@@ -33,3 +33,14 @@ on boot
     chmod 0664 /sys/class/backlight/backlight/brightness
 
     # Stay-on is managed via SettingsProvider overlay (def_stay_on_while_plugged_in)
+
+# HDMI (default) or built-in speakers: setprop persist.vendor.audio.hdmi_out 0|1
+on property:persist.vendor.audio.hdmi_out=0
+    write /sys/module/snd_soc_k1_hdmi_audio/parameters/hdmi_jack 0
+
+on property:persist.vendor.audio.hdmi_out=1
+    write /sys/module/snd_soc_k1_hdmi_audio/parameters/hdmi_jack 1
+
+# Re-apply once booted, in case the module loaded late.
+on property:sys.boot_completed=1 && property:persist.vendor.audio.hdmi_out=0
+    write /sys/module/snd_soc_k1_hdmi_audio/parameters/hdmi_jack 0
