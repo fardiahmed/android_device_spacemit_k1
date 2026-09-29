@@ -8,6 +8,7 @@
 #   ./flash_bpi_f3.sh                Flash all via fastboot (bootloader + android)
 #   ./flash_bpi_f3.sh --bootloader   Flash bootloader only
 #   ./flash_bpi_f3.sh --android      Flash Android images only
+#   ./flash_bpi_f3.sh --boot         Flash boot images only (keeps super+userdata: warm boot)
 #   ./flash_bpi_f3.sh --dfu          Full DFU flash (board in BROM mode)
 #   ./flash_bpi_f3.sh --wipe         Include userdata wipe (combines with any mode)
 #
@@ -327,6 +328,28 @@ mode_android() {
 }
 
 # ============================================================================
+# Mode: --boot: boot-side images only, super and userdata kept (warm boot).
+# Not for kernel module changes (vendor_dlkm is in super): use --android.
+# ============================================================================
+mode_boot() {
+    require_fastboot
+    check_files boot.img
+
+    echo ""
+    echo -e "${BOLD}=== Boot images only (fastboot, super/userdata untouched) ===${NC}"
+    echo -e " Run ${YELLOW}fastboot usb 0${NC} on U-Boot console first"
+    echo ""
+
+    wait_for_device 15 "U-Boot fastboot (run 'fastboot usb 0' on board)"
+    flash_logo
+    flash_android_boot
+
+    echo ""
+    ok "Done! Rebooting (userdata preserved)..."
+    ${FASTBOOT} reboot || warn "Reboot failed, power cycle manually"
+}
+
+# ============================================================================
 # Mode: --dfu (full DFU from BROM)
 # ============================================================================
 mode_dfu() {
@@ -383,6 +406,7 @@ Modes:
   (default)       Flash bootloader + Android via fastboot
   --bootloader    Flash bootloader only via fastboot
   --android       Flash Android images only via fastboot
+  --boot          Flash only boot/vendor_boot/dtbo/vbmeta/logo; keeps super+userdata (fast iteration)
   --dfu           Full DFU flash (board in BROM mode, first-time setup)
 
 Options:
@@ -395,6 +419,7 @@ Examples:
   ./flash_bpi_f3.sh                       # Flash everything (BananaPi F3)
   ./flash_bpi_f3.sh --board musepi-pro    # Flash everything (MusePi Pro)
   ./flash_bpi_f3.sh --android             # Flash only Android images
+  ./flash_bpi_f3.sh --boot                # Kernel/splash iteration, no data wipe
   ./flash_bpi_f3.sh --dfu --wipe          # First-time DFU setup with clean userdata
 EOF
 }
@@ -409,6 +434,7 @@ main() {
         case "$1" in
             --bootloader)    mode="bootloader"; shift ;;
             --android)       mode="android"; shift ;;
+            --boot)          mode="boot"; shift ;;
             --dfu)           mode="dfu"; shift ;;
             --wipe)          do_wipe=true; shift ;;
             --no-avb)        DISABLE_AVB=true; shift ;;
@@ -440,6 +466,7 @@ main() {
     case "${mode}" in
         bootloader) mode_bootloader "${do_wipe}" ;;
         android)    mode_android "${do_wipe}" ;;
+        boot)       mode_boot ;;
         dfu)        mode_dfu "${do_wipe}" ;;
         all)        mode_all "${do_wipe}" ;;
     esac
