@@ -15,10 +15,7 @@
         <name>SPKL Playback Volume</name>
     </control>
 
-    <!-- Microphone mute via ALC switch -->
-    <control function="MIC_SWITCH" type="bool">
-        <name>ALC Capture Switch</name>
-    </control>
+    <!-- No MIC_SWITCH: the ES8326 has no capture mute; the HAL zero-fills muted capture. -->
 
     <!-- Microphone gain (ADC capture volume) -->
     <control function="MIC_GAIN" type="int">
