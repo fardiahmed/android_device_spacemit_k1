@@ -32,6 +32,9 @@ on boot
     chown system system /sys/class/backlight/backlight/brightness
     chmod 0664 /sys/class/backlight/backlight/brightness
 
+    # Miracast: allow 8 MB UDP receive buffers for 1080p IDR bursts.
+    write /proc/sys/net/core/rmem_max 8388608
+
     # Stay-on is managed via SettingsProvider overlay (def_stay_on_while_plugged_in)
 
 # HDMI (default) or built-in speakers: setprop persist.vendor.audio.hdmi_out 0|1
