@@ -18,7 +18,7 @@ PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_NAME := aosp_bananapi_f3_tablet
 PRODUCT_DEVICE := k1
 PRODUCT_BRAND := BananaPi
-PRODUCT_MODEL := BananaPi F3 Tablet
+PRODUCT_MODEL := BananaPi F3 Tablet RISC V
 PRODUCT_MANUFACTURER := Sinovoip
 
 # Tablet packages

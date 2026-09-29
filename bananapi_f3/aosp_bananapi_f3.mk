@@ -11,5 +11,5 @@ $(call inherit-product, device/spacemit/k1/device.mk)
 PRODUCT_NAME := aosp_bananapi_f3
 PRODUCT_DEVICE := k1
 PRODUCT_BRAND := BananaPi
-PRODUCT_MODEL := BananaPi F3
+PRODUCT_MODEL := BananaPi F3 RISC V
 PRODUCT_MANUFACTURER := Sinovoip
