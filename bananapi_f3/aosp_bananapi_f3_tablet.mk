@@ -6,6 +6,8 @@
 
 # Tablet build for BananaPi F3
 
+# First: replacements of AOSP default files (PRODUCT_COPY_FILES is first-wins)
+$(call inherit-product, device/spacemit/common/early-overrides.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
