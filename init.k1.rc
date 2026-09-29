@@ -24,6 +24,10 @@ on post-fs-data
     mkdir /data/vendor/wifi/wpa 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
 
+# VPU driver: no modalias for "arm china,linlon-v5", load it explicitly.
+on early-boot
+    exec_background u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -d /vendor_dlkm/lib/modules amvx
+
 on boot
     chown system system /sys/class/backlight/backlight/brightness
     chmod 0664 /sys/class/backlight/backlight/brightness
