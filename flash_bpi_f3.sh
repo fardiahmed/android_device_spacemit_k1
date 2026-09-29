@@ -151,6 +151,18 @@ flash_bootloader_nor() {
 }
 
 # ============================================================================
+# Flash the U-Boot splash screen ("logo" partition, needs the new GPT).
+flash_logo() {
+    if [ -f "${BL}/logo.bmp" ]; then
+        info "Flashing splash logo..."
+        ${FASTBOOT} flash logo "${BL}/logo.bmp"
+        ok "Logo flashed"
+    else
+        warn "logo.bmp not found, skipping splash screen"
+    fi
+}
+
+# ============================================================================
 # Flash Android boot partitions (both slots a and b)
 # ============================================================================
 flash_android_boot() {
@@ -240,6 +252,7 @@ mode_all() {
     else
         flash_bootloader
     fi
+    flash_logo
     flash_android_boot
     flash_super
 
@@ -274,6 +287,7 @@ mode_bootloader() {
     else
         flash_bootloader
     fi
+    flash_logo
 
     echo ""
     ok "Done! Reboot the board to use new bootloader."
@@ -295,6 +309,7 @@ mode_android() {
     echo ""
 
     wait_for_device 15 "U-Boot fastboot (run 'fastboot usb 0' on board)"
+    flash_logo
     flash_android_boot
 
     if [ -f "${IMG}/super.img" ]; then
@@ -342,6 +357,7 @@ mode_dfu() {
         ok "GPT written"
         flash_bootloader
     fi
+    flash_logo
     flash_android_boot
     flash_super
 

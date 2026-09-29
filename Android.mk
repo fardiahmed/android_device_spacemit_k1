@@ -66,6 +66,11 @@ $(PRODUCT_OUT)/flash_bpi_f3.sh: device/spacemit/k1/flash_bpi_f3.sh
 	chmod +x $@
 SPACEMIT_FLASH_FILES += $(PRODUCT_OUT)/flash_bpi_f3.sh
 
+# U-Boot splash screen, flashed to the "logo" partition.
+$(PRODUCT_OUT)/logo.bmp: device/spacemit/k1/logo.bmp
+	cp $< $@
+SPACEMIT_FLASH_FILES += $(PRODUCT_OUT)/logo.bmp
+
 droidcore: $(SPACEMIT_FLASH_FILES)
 
 endif # u-boot-release.itb exists
@@ -145,6 +150,12 @@ $(MUSEPI_OUT)/partition_nor.json: $(MUSEPI_BL_PREBUILT)/partition_nor.json
 	cp $< $@
 SPACEMIT_MUSEPI_FLASH_FILES += $(MUSEPI_OUT)/partition_nor.json
 endif
+
+# Same splash screen as the BPI-F3.
+$(MUSEPI_OUT)/logo.bmp: device/spacemit/k1/logo.bmp
+	mkdir -p $(dir $@)
+	cp $< $@
+SPACEMIT_MUSEPI_FLASH_FILES += $(MUSEPI_OUT)/logo.bmp
 
 droidcore: $(SPACEMIT_MUSEPI_FLASH_FILES)
 
