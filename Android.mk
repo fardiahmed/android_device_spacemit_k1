@@ -1,5 +1,8 @@
 LOCAL_PATH := $(call my-dir)
 
+# Make visits every Android.mk whatever the product: keep these PRODUCT_OUT rules to K1 builds.
+ifeq ($(TARGET_DEVICE),k1)
+
 #
 # Copy bootloader prebuilts and flash script to PRODUCT_OUT
 # Source: vendor/spacemit/k1/bootloader/ (populated by release_android.sh)
@@ -146,3 +149,5 @@ endif
 droidcore: $(SPACEMIT_MUSEPI_FLASH_FILES)
 
 endif # musepi-pro u-boot-release.itb exists
+
+endif # TARGET_DEVICE == k1

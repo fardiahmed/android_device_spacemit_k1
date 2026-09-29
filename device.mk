@@ -4,6 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# SpacemiT K1: BananaPi F3. Shared parts are in device/spacemit/common; every SPACEMIT_*
+# feature is supported, so the spacemit-features.mk defaults apply.
+
 # Inherit common
 $(call inherit-product, device/spacemit/common/device-common.mk)
 
@@ -19,9 +22,6 @@ LOCAL_KERNEL := device/spacemit/k1-kernel/$(TARGET_KERNEL_USE)/Image
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
-
-# Overlays (stay-on, no lockscreen for dev)
-DEVICE_PACKAGE_OVERLAYS := device/spacemit/k1/overlay
 
 # Properties
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -41,40 +41,26 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio mixer controls (BPI-F3 / ES8326B codec)
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/mixer_controls.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_controls.xml
+    device/spacemit/k1/audio/mixer_controls.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_controls.xml
 
-# ============================================================
-# External USB camera support
-# ============================================================
+# Fstab
 PRODUCT_PACKAGES += \
-    android.hardware.camera.provider-V1-external-service
+    fstab.k1 \
+    fstab.k1.vendor_ramdisk
 
+# Init
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml \
-    frameworks/native/data/etc/android.hardware.camera.external.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.external.xml \
-    frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml
+    device/spacemit/k1/init.k1.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.k1.rc \
+    device/spacemit/k1/init.k1.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.k1.usb.rc \
+    device/spacemit/k1/ueventd.k1.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
 
-# Codec2: use AIDL HAL so that app processes (e.g. scrcpy) can discover
-# software codecs via IComponentStore/software instead of relying on the
-# in-process ApexCodecs path that only works in system processes.
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.c2.hal.selection=aidl \
-    debug.stagefright.c2inputsurface=-1
-
-# Vendor seccomp policy extension for media.swcodec.
-# Allows syscalls needed by Mesa/Zink GPU init (sched_getaffinity, epoll, etc.)
-# triggered via AHardwareBuffer_isSupported inside the mediaswcodec sandbox.
+# GPU firmware (PowerVR)
 PRODUCT_COPY_FILES += \
-    device/spacemit/k1/seccomp_policy/mediaswcodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaswcodec.policy
+    device/spacemit/k1/firmware/powervr/rogue_36.29.52.182_v1.fw:$(TARGET_COPY_OUT_VENDOR)/firmware/powervr/rogue_36.29.52.182_v1.fw
 
-# Soong namespaces for Mesa prebuilts and gbm_mesa_wrapper
-PRODUCT_SOONG_NAMESPACES += device/spacemit/k1/mesa
-PRODUCT_SOONG_NAMESPACES += external/minigbm/gbm_mesa_driver
+# Soong namespace of this directory (fstab, recovery UI, HDMI-CEC HAL, Wi-Fi HAL/supplicant)
+PRODUCT_SOONG_NAMESPACES += \
+    device/spacemit/k1
 
-# Override preloaded-classes to drop android.renderscript.* entries —
-# RenderScript is deprecated since API 31 and not built on RISC-V, so Zygote
-# logs warnings on every preload attempt. The device file is the upstream list
-# minus those entries.
-PRODUCT_COPY_FILES += \
-    device/spacemit/k1/preloaded-classes:system/etc/preloaded-classes
-
+# Optional features (SPACEMIT_*): must come last, after the defaults above.
+$(call inherit-product, device/spacemit/common/spacemit-features.mk)

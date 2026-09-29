@@ -9,8 +9,6 @@ genfscon sysfs /devices/platform/soc/cac00000.imggpu                       u:obj
 genfscon sysfs /devices/platform/soc/soc:multimedia-bus/cac00000.imggpu    u:object_r:sysfs_gpu:s0
 # Fallback for any other GPU sysfs nodes
 genfscon sysfs /devices/platform/soc/ffe40000.gpu                          u:object_r:sysfs_gpu:s0
-# DRM virtual devices — needed by SurfaceFlinger / hwc-drm for connector hotplug
-genfscon sysfs /devices/virtual/drm                                         u:object_r:sysfs_gpu:s0
 # Display subsystem (HDMI) - accessed by surfaceflinger, gralloc, bootanim for hotplug
 genfscon sysfs /devices/platform/c0440000.display-subsystem-hdmi           u:object_r:sysfs_gpu:s0
 genfscon sysfs /devices/platform/soc/c0400500.hdmi                         u:object_r:sysfs_gpu:s0
@@ -19,11 +17,3 @@ genfscon sysfs /devices/platform/soc/ff900000.vpu                          u:obj
 # RTC wakeup
 genfscon sysfs /devices/platform/soc/ff800000.bus/ff8000a8.rtc/rtc/rtc1/alarmtimer.0.auto/wakeup/wakeup1  u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/ff800000.bus/ff8000a8.rtc/wakeup/wakeup0                             u:object_r:sysfs_wakeup:s0
-# Power supply / battery (sysfs_batteryinfo is the AOSP type for /class/power_supply)
-genfscon sysfs /class/power_supply                                          u:object_r:sysfs_batteryinfo:s0
-# Thermal
-genfscon sysfs /class/thermal                                               u:object_r:sysfs_thermal:s0
-genfscon sysfs /devices/virtual/thermal                                     u:object_r:sysfs_thermal:s0
-
-# proc
-genfscon proc /sys/vm/swappiness                                            u:object_r:proc_dirty:s0
