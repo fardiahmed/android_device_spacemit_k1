@@ -30,9 +30,11 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(wildcard $(KERNEL_MODULES_PATH)/ramdisk
 # so the K1 clk driver loads with unresolved spacemit_ccu_* symbols -> no clocks
 # -> pinctrl/mmc/i2c/etc defer -> reboot. Force the core first; the rest keep
 # wildcard order (which booted pre-migration).
+# The USB3 combo PHY must load before dwc3-spacemit (xHCI init times out otherwise).
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
     $(KERNEL_MODULES_PATH)/ramdisk/spacemit-ccu.ko \
-    $(filter-out %/spacemit-ccu.ko,$(BOARD_VENDOR_RAMDISK_KERNEL_MODULES))
+    $(KERNEL_MODULES_PATH)/ramdisk/phy-spacemit-k1x-combphy.ko \
+    $(filter-out %/spacemit-ccu.ko %/phy-spacemit-k1x-combphy.ko,$(BOARD_VENDOR_RAMDISK_KERNEL_MODULES))
 
 BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(KERNEL_MODULES_PATH)/vendor_dlkm/*.ko)
 # realtek.ko (RTL8211F PHY) and its phy_package.ko dependency MUST load before
