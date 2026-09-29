@@ -17,3 +17,6 @@ genfscon sysfs /devices/platform/soc/ff900000.vpu                          u:obj
 # RTC wakeup
 genfscon sysfs /devices/platform/soc/ff800000.bus/ff8000a8.rtc/rtc/rtc1/alarmtimer.0.auto/wakeup/wakeup1  u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/ff800000.bus/ff8000a8.rtc/wakeup/wakeup0                             u:object_r:sysfs_wakeup:s0
+
+# Header I2C4 sensor modules (hwmon/IIO), read by the sensors HAL
+genfscon sysfs /devices/platform/soc/d4012800.i2c u:object_r:sysfs_header_sensors:s0

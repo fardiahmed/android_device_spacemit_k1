@@ -27,6 +27,8 @@ on post-fs-data
 # VPU driver: no modalias for "arm china,linlon-v5", load it explicitly.
 on early-boot
     exec_background u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -d /vendor_dlkm/lib/modules amvx
+    # i2c-dev (no modalias) for the sensors HAL, before it starts.
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -d /vendor_dlkm/lib/modules i2c-dev
 
 on boot
     chown system system /sys/class/backlight/backlight/brightness
