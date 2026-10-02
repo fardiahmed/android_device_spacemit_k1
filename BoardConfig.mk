@@ -54,8 +54,6 @@ BOARD_SYSTEM_KERNEL_MODULES_LOAD := $(BOARD_SYSTEM_KERNEL_MODULES)
 BOARD_BOOTCONFIG += androidboot.hardware=k1
 BOARD_BOOTCONFIG += androidboot.boot_devices=soc/soc:storage-bus/d4281000.mmc
 BOARD_BOOTCONFIG += androidboot.fstab_suffix=k1
-BOARD_BOOTCONFIG += androidboot.vendor.apex.com.android.hardware.keymint=com.android.hardware.keymint.rust_nonsecure
-BOARD_BOOTCONFIG += androidboot.vendor.apex.com.android.hardware.gatekeeper=com.android.hardware.gatekeeper.nonsecure
 BOARD_BOOTCONFIG += androidboot.selinux=permissive
 
 # Partition sizes
