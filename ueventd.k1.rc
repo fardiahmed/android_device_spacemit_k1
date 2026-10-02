@@ -18,3 +18,7 @@ modalias_handling enabled
 
 # HDMI-CEC adapter (cec-gpio on GPIO_88), used by android.hardware.tv.hdmi-service.k1 (system)
 /dev/cec*                 0660   system     system
+
+# OP-TEE: tee0 for the KeyMint/Gatekeeper HALs (system), teepriv0 for tee-supplicant (system)
+/dev/tee0                 0660   system     system
+/dev/teepriv0             0660   system     system
