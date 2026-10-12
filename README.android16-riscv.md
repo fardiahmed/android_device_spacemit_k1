@@ -26,6 +26,7 @@ BananaPi BPI-F3 (SpacemiT K1) device.
 - **k1: inherit early-overrides.mk first**: So device/spacemit/common's replacements of AOSP default files (preloaded-classes) win; PRODUCT_COPY_FILES is first-wins.
 - **k1: give the KeyMint/Gatekeeper HALs and tee-supplicant the TEE devices**: /dev/tee0 and /dev/teepriv0 (OP-TEE driver) to system, the user of the OP-TEE KeyMint/Gatekeeper HALs and of tee-supplicant.
 - **k1: leave the KeyMint/Gatekeeper selection to common**: The nonsecure APEX bootconfig is only needed without OP-TEE: SPACEMIT_OPTEE in device/spacemit/common decides.
+- **k1: select fstab storage target with SPACEMIT_STORAGE**: the generated fstab node is a Soong-config variable -- emmc (onboard, default), sdcard (microSD) or ssd (NVMe by-name, experimental); see config/fstab/README.md. emmc and sdcard validated on the board.
 
 ## Notes
 
