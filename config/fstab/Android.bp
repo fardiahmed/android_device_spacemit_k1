@@ -5,11 +5,45 @@ package {
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
-genrule {
+// Storage target, chosen by SPACEMIT_STORAGE (device.mk): emmc (onboard, default),
+// sdcard (microSD @d4280000), or ssd (NVMe by-name; experimental, see README).
+soong_config_string_variable {
+    name: "storage",
+    values: [
+        "emmc",
+        "sdcard",
+        "ssd",
+    ],
+}
+
+soong_config_module_type {
+    name: "spacemit_fstab_genrule",
+    module_type: "genrule",
+    config_namespace: "spacemit",
+    variables: ["storage"],
+    properties: ["cmd"],
+}
+
+spacemit_fstab_genrule {
     name: "gen_fstab_k1",
     srcs: ["fstab.in"],
     out: ["fstab.k1"],
-    cmd: "sed 's/@mmc_node@/soc:storage-bus\\/d4281000.mmc/g' $(in) > $(out)",
+    soong_config_variables: {
+        storage: {
+            emmc: {
+                cmd: "sed 's#@mmc_node@#soc:storage-bus/d4281000.mmc#g' $(in) > $(out)",
+            },
+            sdcard: {
+                cmd: "sed 's#@mmc_node@#soc:storage-bus/d4280000.mmc#g' $(in) > $(out)",
+            },
+            ssd: {
+                cmd: "sed -e 's#/dev/block/platform/soc/@mmc_node@/by-name/#/dev/block/by-name/#g' $(in) > $(out)",
+            },
+            conditions_default: {
+                cmd: "sed 's#@mmc_node@#soc:storage-bus/d4281000.mmc#g' $(in) > $(out)",
+            },
+        },
+    },
 }
 
 prebuilt_etc {

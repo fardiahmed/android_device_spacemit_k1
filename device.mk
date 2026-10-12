@@ -7,6 +7,14 @@
 # SpacemiT K1: BananaPi F3. Shared parts are in device/spacemit/common; every SPACEMIT_*
 # feature is supported, so the spacemit-features.mk defaults apply.
 
+# Storage target for the generated fstab: emmc (onboard eMMC, default),
+# sdcard (microSD @d4280000), or ssd (NVMe by-name; experimental, see config/fstab).
+SPACEMIT_STORAGE ?= emmc
+ifeq ($(filter emmc sdcard ssd,$(SPACEMIT_STORAGE)),)
+$(error SPACEMIT_STORAGE must be emmc, sdcard or ssd (got '$(SPACEMIT_STORAGE)'))
+endif
+$(call soong_config_set,spacemit,storage,$(SPACEMIT_STORAGE))
+
 # Inherit common
 $(call inherit-product, device/spacemit/common/device-common.mk)
 
